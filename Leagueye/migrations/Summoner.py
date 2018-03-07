@@ -7,7 +7,7 @@ import json
 
 # Create your models here.
 
-api_key = "RGAPI-3090a5c4-fb21-418e-81ab-e780d70c7ae4"
+api_key = "RGAPI-fc643e9e-43ac-476b-b1f3-b0649cf5d2e5"
 
 
 class Summoner(object):
@@ -16,25 +16,11 @@ class Summoner(object):
     def __init__(self, summoner_name):
         self.accountId = None
         self.name = None
-        #self.profileIconId = None
-        # self.summonerLevel = None
         self.summoner = summoner_name
         self.raw_summoner = self.get_raw_data()
-        self.accountId = self.parse(self.raw_summoner, "accountId")
+        self.Id = self.parse(self.raw_summoner, "id")
         self.name = self.parse(self.raw_summoner, "name")
-        #    #self.xml_match = self.get_xml_match()
-        #    self.summonerLevel = self.parse(self.xml_summoner, "summonerLevel")
-        #    self.profileIconId = self.parse(self.xml_summoner, "profileIconId")
 
-    # self.level =
-    # self.rank =
-    # self.tier =
-    # self.match =
-    # self.champion =
-    # self.spell1 =
-    # self.spell2 =
-    # self.keystone1 =
-    # self.keystone2 =
 
     def get_url(self):
         url = "https://euw1.api.riotgames.com/lol/summoner/v3/summoners/by-name/"
@@ -53,7 +39,7 @@ class Summoner(object):
 
         except HTTPError:
             print("User does not exist")
-            raise Http404(UserWarning)
+            #raise Http404(UserWarning)
             # return None
 
     def parse(self, raw, attribute):
@@ -67,7 +53,7 @@ class Summoner(object):
         return None
 
     def get_id(self):
-        return self.accountId
+        return self.Id
 
     def get_name(self):
         return self.name
@@ -79,13 +65,13 @@ class Summoner(object):
         return self.get_url(url)
 
 
-if __name__ == '__main__':
-    requested_name = "josepantoni4"
+"""if __name__ == '__main__':
+    requested_name = "traxx"
     sum = Summoner(requested_name.replace(" ", ""))
 
-    if sum.accountId != None: print(sum.accountId)
+    if sum.Id != None: print(sum.Id)
     if sum.name != None: print(sum.name)
     # if sum.summonerLevel != None: print(sum.summonerLevel)
     # if sum.profileIconId != None: print(sum.profileIconId)
-
+"""
 # sum.almanac()
