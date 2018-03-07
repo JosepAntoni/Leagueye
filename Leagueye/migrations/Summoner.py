@@ -19,7 +19,7 @@ class Summoner(object):
         self.summoner = summoner_name
         self.raw_summoner = self.get_raw_data()
         self.Id = self.parse(self.raw_summoner, "id")
-        self.name = self.parse(self.raw_summoner, "name")
+        self.level = self.parse(self.raw_summoner, "level")
 
 
     def get_url(self):
@@ -55,8 +55,8 @@ class Summoner(object):
     def get_id(self):
         return self.Id
 
-    def get_name(self):
-        return self.name
+    def get_level(self):
+        return self.level
 
     def get_xml_match(self):
         url = "https://euw1.api.riotgames.com/lol/spectator/v3/active-games/by-summoner/"
@@ -74,4 +74,3 @@ class Summoner(object):
     # if sum.summonerLevel != None: print(sum.summonerLevel)
     # if sum.profileIconId != None: print(sum.profileIconId)
 """
-# sum.almanac()
