@@ -1,9 +1,7 @@
-from django.db import models
 from bs4 import BeautifulSoup
-from django.http import Http404
 from urllib.error import HTTPError
 from urllib.request import urlopen
-from Leagueye.migrations.Summoner import Summoner
+from Leagueye.Summoner import Summoner
 import json
 
 # Create your models here.
@@ -15,6 +13,7 @@ class Match(object):
     """documentation TODO"""
 
     def __init__(self, summoner_name = object):
+        #self.players = []
         self.summoner_id = Summoner(summoner_name).get_id()
         self.match_data = self.get_match_data()
         self.players = self.parse(self.match_data, "participants")
@@ -38,9 +37,8 @@ class Match(object):
             return raw_data
 
         except HTTPError:
-            print("El usuario no esta en partida")
-            # raise Http404(UserWarning)
-            # return None
+            #raise Exception("El usuario no esta en partida")
+            return None
 
     def parse(self, raw, attribute):
         # parse
@@ -55,32 +53,34 @@ class Match(object):
     def get_players(self, list):
         left = []
         right = []
-        for dict in list:
-            aux = {}
-            #summonerName = dict["summonerName"]
-            aux["championId"] = dict["championId"]
-            aux["summonerName"] = dict["summonerName"]
-            aux["summonerId"] = dict["summonerId"]
-            aux["spell1Id"] = dict["spell1Id"]
-            aux["spell2Id"] = dict["spell2Id"]
-            aux["perks"] = dict["perks"]
-            if dict["teamId"] == 100:
-                left.append(aux)
-            else: right.append(aux)
+        if list != None:
+            for dict in list:
+                aux = {}
+                #summonerName = dict["summonerName"]
+                aux["championId"] = dict["championId"]
+                aux["summonerName"] = dict["summonerName"]
+                aux["summonerId"] = dict["summonerId"]
+                aux["spell1Id"] = dict["spell1Id"]
+                aux["spell2Id"] = dict["spell2Id"]
+                aux["perks"] = dict["perks"]
+                if dict["teamId"] == 100:
+                    left.append(aux)
+                else: right.append(aux)
         return left, right
 
     def get_bans(self, list):
         left = []
         right = []
-        for dict in list:
-            if dict["teamId"] == 100:
-                left.append(dict["championId"])
-            else:
-                right.append(dict["championId"])
+        if list != None:
+            for dict in list:
+                if dict["teamId"] == 100:
+                    left.append(dict["championId"])
+                else:
+                    right.append(dict["championId"])
         return left, right
 
 if __name__ == '__main__':
-    match = Match("steverino")
+    match = Match("cowsep")
 
     print(match.left_team)
     print(match.right_team)
