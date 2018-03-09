@@ -3,7 +3,9 @@ from urllib.error import HTTPError
 from urllib.request import urlopen
 from Leagueye.Summoner import Summoner
 import json
-
+from Leagueye.League import League
+from Leagueye.SummonerId import SummonerId
+import time
 # Create your models here.
 
 api_key = "RGAPI-fc643e9e-43ac-476b-b1f3-b0649cf5d2e5"
@@ -46,7 +48,6 @@ class Match(object):
             soup = BeautifulSoup(raw, "html.parser")
             newDictionary = json.loads(str(soup))
             attr = newDictionary[attribute]
-            # print results
             return attr
         return None
 
@@ -55,6 +56,7 @@ class Match(object):
         right = []
         if list != None:
             for dict in list:
+                #time.sleep(1)
                 aux = {}
                 #summonerName = dict["summonerName"]
                 aux["championId"] = dict["championId"]
@@ -63,10 +65,19 @@ class Match(object):
                 aux["spell1Id"] = dict["spell1Id"]
                 aux["spell2Id"] = dict["spell2Id"]
                 aux["perks"] = dict["perks"]
+                aux = self.get_league_data(aux)
                 if dict["teamId"] == 100:
                     left.append(aux)
                 else: right.append(aux)
         return left, right
+
+    def get_league_data(self, aux):
+        league = League(aux["summonerId"])
+        tier, rank, win_rate = league.get_data()
+        aux["tier"] = tier
+        aux["rank"] = rank
+        aux["winrate"] = win_rate
+        return aux
 
     def get_bans(self, list):
         left = []
@@ -79,15 +90,12 @@ class Match(object):
                     right.append(dict["championId"])
         return left, right
 
-if __name__ == '__main__':
-    match = Match("cowsep")
+    def get_data(self):
+        return self.left_team, self.right_bans, self.left_bans, self.right_bans
 
+if __name__ == '__main__':
+    match = Match("fourmarta")
     print(match.left_team)
     print(match.right_team)
-    print(match.left_bans)
-    print(match.right_bans)
-    #if sum.name != None: print(sum.name)
-    # if sum.summonerLevel != None: print(sum.summonerLevel)
-    # if sum.profileIconId != None: print(sum.profileIconId)
-
-# sum.almanac()
+    #print(match.left_bans)
+    #print(match.right_bans)

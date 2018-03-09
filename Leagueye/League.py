@@ -51,7 +51,6 @@ class League(object):
             soup = BeautifulSoup(raw, "html.parser")
             newDictionary = json.loads(str(soup))
             attr = newDictionary[attribute]
-            # print results
             return attr
         return None
 
@@ -72,20 +71,15 @@ class League(object):
         elif len(newDictionary) == 1:
             aux = "RANKED_SOLO_5x5"
             if newDictionary[0]["queueType"] == aux:
-                print(newDictionary[0])
                 return newDictionary[0]
             else:
                 return None
         else:
             return None
 
+    def get_data(self):
+        return self.tier, self.rank, self.win_rate
 
 
 
-if __name__ == '__main__':
-
-    league = League(24743501)
-    print(league.win_rate)
-    print(league.tier)
-    print(league.rank)
 

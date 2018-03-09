@@ -10,20 +10,18 @@ import json
 api_key = "RGAPI-fc643e9e-43ac-476b-b1f3-b0649cf5d2e5"
 
 
-class Summoner(object):
+class SummonerId(object):
     """documentation TODO"""
 
-    def __init__(self, summoner_name):
-        self.accountId = None
-        self.name = None
-        self.sum = summoner_name
-        self.summoner = summoner_name.replace(" ","")
+    def __init__(self, summoner_id):
+        self.id = summoner_id
         self.raw_summoner = self.get_raw_data()
-        self.Id = self.parse(self.raw_summoner, "id")
+        self.level = self.parse(self.raw_summoner, "summonerLevel")
+
 
     def get_url(self):
         url = "https://euw1.api.riotgames.com/lol/summoner/v3/summoners/by-name/"
-        url += self.summoner + "?api_key="
+        url += str(self.id) + "?api_key="
         url += api_key
         return url
 
@@ -39,7 +37,7 @@ class Summoner(object):
         except HTTPError:
             print("User does not exist")
             #raise Http404(UserWarning)
-            # return None
+            return None
 
     def parse(self, raw, attribute):
         # parse
@@ -52,19 +50,16 @@ class Summoner(object):
         return None
 
     def get_id(self):
-        return self.Id
+        return self.id
 
     def get_level(self):
         return self.level
 
 
 
-"""if __name__ == '__main__':
-    requested_name = "traxx"
-    sum = Summoner(requested_name.replace(" ", ""))
+if __name__ == '__main__':
+    sum = SummonerId(34980265)
 
-    if sum.Id != None: print(sum.Id)
-    if sum.name != None: print(sum.name)
+    if sum.level != None: print(sum.level)
     # if sum.summonerLevel != None: print(sum.summonerLevel)
     # if sum.profileIconId != None: print(sum.profileIconId)
-"""
